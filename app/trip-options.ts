@@ -1,3 +1,5 @@
+import {meizhouSchedule,meizhouTransport,meizhouDetails} from './meizhou';
+import {reviseSchedule} from './route-revision';
 import {destinations, type Stop} from './travel-data';
 export type Period={label:string;enabled:boolean;locked?:boolean;stops:Stop[];sight?:number;group?:string};
 const stop=(time:string,title:string,detail:string,travel?:string):Stop=>({time,title,detail,travel});
@@ -90,13 +92,14 @@ slotTransport.taining[3][1]='古城午餐后直接出发，不回酒店取行李
 export function transportForSlot(id:string,start:number,i:number,j:number,slots:Record<string,boolean>){
  let text=slotTransport[id][i][j];
  if(id==='zhangzhou'&&i===2&&!isSlotEnabled(id,start,i,1,slots)){
-  if(j===0)text+=' 下午未勾选：上午结束后回酒店，福莱喜25—40分钟/华福5—15分钟。';
+  if(j===0)text+=' 下午未勾选：抵达东山酒店后自行安排。';
   if(j===2)text='下午未勾选：晚餐前从酒店→南门湾，福莱喜25—40分钟/华福5—15分钟，夜景后原路返酒店；假期另留20分钟。若同时启用下午，则可在铜陵连续游玩，减少酒店往返。';
  }
  if(j===2&&isSlotEnabled(id,start,i,1,slots)&&!schedules[id][i][1].group){
   if(id==='taining'&&(i===0||i===2)) text='下午已在古城：留在附近用晚餐，河畔→尚书街步行约5—15分钟，不回酒店再出门。晚间结束→华大驾车5—10分钟/闽江20—30分钟，假期另加15—20分钟。';
   if(id==='zhangzhou'&&i===0) text='下午已在漳州古城：文庙周边→新华西路步行约5—15分钟，在古城就地晚餐；结束后→漳州宾馆驾车5—10分钟或步行15—25分钟。';
  }
+ if(id==='meizhou'&&i===2&&j===1&&!isSlotEnabled(id,start,2,0,slots))text='上午未勾选：13:00左右直接从金沙湾酒店→松口驾车60—75分钟，豪生酒店70—90分钟，假期加20分钟；游玩后原路返酒店，不经雁南飞。';
  return text;
 }
 
@@ -121,4 +124,19 @@ export const nearest:Record<string,{place:string;distance:string}>={
  '112994833':{place:'金銮湾沙滩',distance:'到所选开放入口约5—10公里（规划估算），车程10—20分钟；沿岸酒店与入口并非同一点。'},
  '4498102':{place:'南门湾',distance:'道路约1—3公里（规划估算），车程5—15分钟。'}
 };
-export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
+export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/梅州|嘉应|松口|雁南飞|客家博物馆/.test(query)?'梅州':/屯溪|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
+
+reviseSchedule(schedules,slotTransport,spotDetails,nearest);
+
+schedules.meizhou=meizhouSchedule;slotTransport.meizhou=meizhouTransport;Object.assign(spotDetails,meizhouDetails);
+nearest['1258061']={place:'嘉应古城',distance:'道路约8—12公里、驾车20—30分钟规划估算；不是步行可达景区酒店。'};nearest['968063']={place:'嘉应古城',distance:'携程周边列表约1.3公里（非道路里程）；驾车约10—15分钟规划估算。'};
+
+// Short, practical play guidance: route first, then the worthwhile details.
+spotDetails['中心湖区·梅峰揽胜']=['先选明确含梅峰、可用往返缆车的船线。上午随船看群岛及产品内的龙山岛海瑞祠或月光岛码头短线；不要把所有岛都当作必去。','梅峰是重点：缆车后到观景台停20—30分钟，看湖湾和密集群岛；若船线上午先到梅峰，下午看文化岛。岛上仍需短走，午餐跟随船线安排。','这是完整约5—6小时产品窗口，不可自由跳船换岛；不另买滑草、摩托艇或长环线徒步。'];
+spotDetails['酒店湖景＋镇区慢生活']=['湖岸选蓝湾酒店开放岸线或镇区公共亲水点，走20—30分钟后找座位看近岸船只与远处群岛，不必重复走整段湖边。','骑龙巷只逛临街下段，挑小吃、咖啡或点心店坐一坐；它是生活街巷体验，不以爬台阶拍高处机位为目标。'];
+spotDetails['大金湖']=['玩法以随船看丹霞为主：湖面先看开阔水域与岩壁层次，登岸再看甘露岩寺岩穴下的木构和支撑结构，视角不同。','下午随产品停靠水际瀑布等后半程景点，再看回程湖面；每个登岸点选20—40分钟短线，跟好集合时间，不走陡窄陆地一线天。','停靠点和先后顺序由船班决定，瀑布水量也不保证。整段游船结束后才接车吃饭，不在中途折回酒店。'];
+spotDetails['九龙潭']=['先到票面长兴服务区换乘，再坐竹筏看水上一线天：值得留意两侧岩壁逼近、峡谷转折与水面倒影，和大金湖的开阔湖面不同。','筏游按约1.5小时作参考，含景交排队留3—4小时。只选可行的短线进出，不为套票追加玻璃栈道和登高段。'];
+spotDetails['泰宁古城·尚书第']=['白天先看尚书第：门楼、院落布局、木构和石刻细节，停45—75分钟即可；门槛慢跨，不把每条巷子都走完。','尚书街与河畔放在同一次出行，穿插茶歇，碧玉卷、暖菇包分着尝；晚上只沿亮灯主街短走30—45分钟，看临水街景。'];
+spotDetails['漳州古城']=['走法：文庙周边—新华西路骑楼—附近小吃店，选约1公里短线。白天看屋脊、门面和骑楼连续街景，内部开放再短参观。','卤面、四果汤等两人分着尝，不排网红长队；下午游玩后留古城晚餐，饭后看主街灯光，省去酒店往返。'];
+spotDetails['风动石·关帝庙']=['先看风动石巨石与底部接触关系，再看关帝庙屋脊装饰与古建细节，最后选一小段海岸观景；约1.5小时够看核心。','不加东门屿船游或全海岸环线。第四天带行李到景区，参观后就近简餐直接返福州，减少回酒店一趟。'];
+spotDetails['南门湾']=['沿海湾平缓岸线看弧形海岸与坡地彩色民居，步行20—40分钟后找有座位的茶店；不追天台或长台阶机位。','下午到晚饭后留同一片区：白天看海湾层次，晚上看内侧街巷灯光，再一次回酒店。风浪大时退到内侧街道。'];

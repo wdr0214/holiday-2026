@@ -1,3 +1,5 @@
+import {meizhou} from './meizhou';
+import {reviseDestinations} from './route-revision';
 import {hotelPhotos,sightPhotos} from './media-data';
 export type Photo={file:string;caption:string;source:string};
 export type Stop={time:string;title:string;detail:string;travel?:string};
@@ -86,3 +88,7 @@ export const destinations:Destination[]=[{
 for(const d of destinations){for(const h of d.hotels){h.photos=hotelPhotos[h.id as keyof typeof hotelPhotos]||h.photos}for(const s of d.sights){s.photos=sightPhotos[s.name as keyof typeof sightPhotos]||s.photos}}
 destinations[2].sights[3].photos.push({file:'images/nanmen-third.jpg',caption:'南门湾｜弧形海湾与民居，来源去哪儿景点页；资料图',source:'https://travel.qunar.com/p-oi9489243-nanmenwan'});
 export const checkItems=['确定目的地和日期，核查三晚每晚大床价格均≤1200元','确认房间是一张大床，床宽、楼栋、湖/海景与照片一致','确认双人早餐、停车/接送站及取消截止的具体日期时间','国庆火车票开售后核查车次、站名、发到时间并完成购票','游船/竹筏核对上船地点、班次、必走台阶和回程接驳','出发前3—7天查看天气，前1天复核停航、道路与景区公告','预约首尾接送和偏远景区往返车辆，确认收费及等待规则','带证件、薄外套、防晒、防滑鞋；驾驶员睡足，不安排冒险涉水'];
+
+reviseDestinations(destinations);
+
+destinations.push(meizhou);
