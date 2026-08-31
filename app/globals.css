@@ -20,3 +20,5 @@ body{font-size:16px;line-height:1.75}.section{padding:36px 0}.hero{height:300px}
 @media(max-width:640px){.transport-footer,.transport-costs{font-size:16px}.transport-footer>b{font-size:14px}}
 
 .spot-link{margin-right:16px}
+
+.slot-instructions{padding:0 16px}.slot-instructions>summary{padding:10px 0;cursor:pointer;font-weight:600}.slot-instructions[open]{padding-bottom:16px}
