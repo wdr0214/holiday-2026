@@ -103,6 +103,7 @@ export function transportForSlot(id:string,start:number,i:number,j:number,slots:
   if(id==='zhangzhou'&&i===0) text='下午已在漳州古城：文庙周边→新华西路步行约5—15分钟，在古城就地晚餐；结束后→漳州宾馆驾车5—10分钟或步行15—25分钟。';
  }
  if(id==='meizhou'&&i===2&&j===1&&!isSlotEnabled(id,start,2,0,slots))text='上午未勾选：午餐后直接从豪生酒店→五华热矿泥温泉驾车约90—110分钟，金沙湾酒店约100—120分钟（这两条直达去程仍为估算），假期加20—30分钟。温泉→豪生酒店72.1公里、1小时03分；→金沙湾酒店75.4公里、1小时08分，假期加20—30分钟。';
+ if(id==='qiandao'&&i===3&&j===2&&!isSlotEnabled(id,start,3,0,slots))text='17:00格林豪泰酒店→歙县北站驾车约20—30分钟，国庆留45—60分钟（估算），18:00前到站。高铁G1527：歙县北18:59→福州21:39，2小时40分。出站后打车15—30分钟，预计22:15—22:40抵家。';
  return text;
 }
 
@@ -127,7 +128,7 @@ export const nearest:Record<string,{place:string;distance:string}>={
  '112994833':{place:'金銮湾沙滩',distance:'到所选开放入口约5—10公里（规划估算），车程10—20分钟；沿岸酒店与入口并非同一点。'},
  '4498102':{place:'南门湾',distance:'道路约1—3公里（规划估算），车程5—15分钟。'}
 };
-export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/仙都|鼎湖峰|朱潭山|小赤壁/.test(query)?'缙云':/丽水|古堰|画乡/.test(query)?'丽水':/云和|梯田/.test(query)?'云和':/梅州|嘉应|松口|雁南飞|客家博物馆|磐安围|热矿泥/.test(query)?'梅州':/屯溪|歙县|渔梁|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
+export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/仙都|鼎湖峰|朱潭山|小赤壁/.test(query)?'缙云':/丽水|古堰|画乡/.test(query)?'丽水':/云和|梯田/.test(query)?'云和':/梅州|嘉应|松口|雁南飞|客家博物馆|磐安围|热矿泥/.test(query)?'梅州':/屯溪|歙县|渔梁|徽州|昱城|黎阳|新安江|阳产/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
 
 reviseSchedule(schedules,slotTransport,spotDetails,nearest);
 
@@ -154,9 +155,9 @@ spotDetails['歙县渔梁古镇']=['沿渔梁古街看徽派民居、巴慰祖�
 slotTransport.taining[1][0]='华大酒店→金湖旅游景区售票处：10.7公里、驾车17分钟；假期建议留35—50分钟，停车、步行至登船点另留20分钟。闽江酒店→码头仍为5—15分钟规划估算，假期加15—30分钟。游船含登岛约4—5小时，按实际船班。';
 
 // Current road references; holiday buffers are separate from driving results.
-slotTransport.qiandao[0][0]='鼓楼区→福州站打车15—30分钟，候车留45—60分钟。高铁G3758参考：福州10:07→千岛湖13:26，3小时19分。千岛湖站→蓝湾酒店驾车24公里、33分钟；→假日酒店23.6公里、38分钟，假期接站留60—75分钟。';
-slotTransport.qiandao[2][0]='08:45蓝湾酒店→千岛湖站驾车23.6公里、33分钟；假日酒店23公里、37分钟，假期送站留75分钟。高铁G3023参考：千岛湖10:57→歙县北11:36，39分钟；备选C2375 13:06→13:46，40分钟，改备选则缩短府衙参观。国庆时刻待复核。';
-slotTransport.qiandao[3][1]='渔梁古镇→黄山北站驾车20.3公里、39分钟；从歙县酒店出发约35—50分钟估算。假期送站留60—75分钟，12:45前出发、14:00前到。高铁G3127参考：黄山北14:58→福州17:19，2小时21分；备选G1629 16:22→18:44，2小时22分。国庆时刻待复核。';
+slotTransport.qiandao[0][0]='05:40左右鼓楼区出门，打车至福州站约15—30分钟、另留堵车余量，06:15前到站。高铁G1630：福州07:11→千岛湖10:18，3小时07分。接站→蓝湾酒店驾车24公里、33分钟；→假日酒店23.6公里、38分钟，国庆含出站候车留60—90分钟。';
+slotTransport.qiandao[2]=shexianTransport[0];
+slotTransport.qiandao[3]=shexianTransport[1];
 slotTransport.taining[0][0]='08:00福州鼓楼区出发：自驾→华大酒店308.5公里、3小时54分；→闽江酒店317公里、4小时06分。含休息和假期缓冲，预计13:00—14:30到。铁路替代G648：福州10:36→泰宁12:35，1小时59分；泰宁站→华大酒店驾车15—25分钟、→闽江酒店25—40分钟估算，约13:30—14:30入住。';
 slotTransport.taining[3][1]='13:00泰宁古城→福州鼓楼区，自驾307.9公里、3小时48分；含休息和假期缓冲，预计18:00—20:00到。铁路替代：14:30—14:45古城出发，驾车至泰宁站约15—25分钟估算、假期留40分钟；G647泰宁16:03→福州18:01，1小时58分。';
 slotTransport.zhangzhou[0][0]='08:00福州鼓楼区→漳州宾馆，自驾288.6公里、3小时38分；含用餐休息和假期缓冲，预计13:00—14:00抵达。';
@@ -177,3 +178,13 @@ slotTransport.zhangzhou[3][0]='退房后酒店→风动石景区驾车：华福�
 schedules.zhangzhou[1][0].stops[0].detail='早餐后出发，中途按需短停；抵达售票处后换乘景交，到上观景台开始游览。';
 schedules.zhangzhou[1][1].stops.at(-1)!.detail='不加云水谣，尽量避免晚间山路；回酒店附近用晚餐，拥堵则顺延。';
 schedules.meizhou[3][1].stops[0].detail='途中就近用午餐，按需进服务区休息；抵家时间随路况顺延，不追加景点。';
+
+// Early outbound train and the revised city/deep-river grouping.
+schedules.qiandao[0][0]={label:'上午',enabled:true,locked:true,stops:[{time:'05:40—12:00',title:'早班高铁到千岛湖，接站与午餐',detail:'提前准备早餐，车上可以补觉。到酒店先寄存行李、就近午餐，不默认上午可入住。'}]};
+schedules.qiandao[0][1]={label:'下午',enabled:true,sight:1,stops:[{time:'12:00—14:00',title:'午餐、入住与短歇',detail:'房间未准备好就先在酒店附近用餐、看湖；当天早起，拿房后短歇。'},{time:'14:30—17:00',title:'湖岸观景＋骑龙巷下段',detail:'湖岸走20—30分钟后找座位看湖；再逛骑龙巷临街下段，尝小吃、喝咖啡，不爬长台阶。'}]};
+slotTransport.qiandao[0][1]='酒店开放湖岸步行5—15分钟；酒店↔骑龙巷打车约5—15分钟/程，国庆各加15—20分钟（估算）。';
+spotDetails['歙县渔梁古镇']=['第三天下午与徽州古城串联，走古街短段，看民居、老商埠与练江岸景；巴慰祖故居只作沿街外观。','在安全岸边看渔梁坝，不下坝、不走湿滑码头；参观后直接去晚餐地点，不绕回酒店。'];
+spotDetails['新安江山水画廊']=['选09:00深渡往返游船，先看江面与沿岸村落，按实际停靠安排参观红妆馆、古樟等短线；不把全部沿江景点当作同一张票必含。','回深渡就近午餐，再乘同一辆包车去阳产；船回港晚或排队长，先减少阳产游览，不临时改下午晚船。'];
+spotDetails['阳产土楼']=['山下游客中心换乘景交，到村口后看夯土墙、层叠黑瓦与就近平台；走60—75分钟核心短线，不追最高机位。','村里仍有坡道和台阶；提前问清下山候车点，15:20开始下山。晒秋、云雾和照片机位以当天实况为准。'];
+
+schedules.qiandao[1][0].stops[0].detail='早餐后按已订船班出发，提前30—45分钟到码头；先订含梅峰、可用往返缆车的明确产品。';

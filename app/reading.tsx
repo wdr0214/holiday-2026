@@ -1,6 +1,6 @@
 import React from 'react';
 export function hotelNames(text:string){return text.replace(/皇冠假日|福莱喜|金沙湾|蓝湾|假日|华大|闽江|华福|豪生/g,(name,offset)=>/^(酒店|大酒店|国际大酒店|饭店)/.test(text.slice(offset+name.length))?name:name+'酒店')}
-export function TravelText({text}:{text:string}){return <>{hotelNames(text).split(/(自驾|驾车|高铁|铁路|动车|打车|步行|乘船|游船|竹筏|观光车|景交|缆车|索道|G\d+|D\d+|C\d+)/g).map((part,i)=>i%2?<strong className="travel-mode" key={i}>{part}</strong>:part)}</>}
+export function TravelText({text}:{text:string}){return <>{hotelNames(text).split(/(包车|自驾|驾车|高铁|铁路|动车|打车|步行|乘船|游船|竹筏|观光车|景交|缆车|索道|G\d+|D\d+|C\d+)/g).map((part,i)=>i%2?<strong className="travel-mode" key={i}>{part}</strong>:part)}</>}
 export function StopDescription({text}:{text:string}){
  const sentences=hotelNames(text).split(/(?<=[。；])/).filter(Boolean);
  const notes=sentences.filter(x=>/^(若|如|遇|不保证|不承诺|严重|贵重|以.*为准|学宫内部|实际|两组日期|10月5日)/.test(x));
