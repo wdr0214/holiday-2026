@@ -7,3 +7,8 @@ export function StopDescription({text}:{text:string}){
  const main=sentences.filter(x=>!notes.includes(x));
  return <><p>{main.join('')||notes.shift()}</p>{notes.length>0&&<details className="inline-note"><summary>当天提醒</summary><p>{notes.join('')}</p></details>}</>;
 }
+
+// Keep hotel location distances; travel durations belong to itinerary footers.
+export function distanceOnly(text:string){
+ return hotelNames(text).split(/[；。]/).map(part=>part.replace(/[，、](?:驾车|车程|步行).*$/, '')).filter(part=>!/(?:分钟|小时)/.test(part)).filter(Boolean).join('；');
+}

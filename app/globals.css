@@ -14,3 +14,7 @@ body{font-size:16px;line-height:1.75}.section{padding:36px 0}.hero{height:300px}
 /* Readable transport and short reminders on compact mobile itinerary cards. */
 .travel-mode{font-weight:750;color:#263e31}.inline-note{margin:5px 0 10px;color:var(--muted);font-size:14px}.inline-note summary{cursor:pointer;font-size:14px}.inline-note p{margin:5px 0}.period>.transfer,.period>div>.transfer{background:#edf1e8;border-radius:6px;padding:10px 12px;margin:8px 0 14px;line-height:1.75}.dest-tabs{display:flex;flex-wrap:wrap}.destination-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:640px){.destination-grid{grid-template-columns:1fr}.dest-tabs button{font-size:16px;padding:7px 9px}.stop .inline-note p,.inline-note summary{font-size:15px}.period>div>.transfer{font-size:16px;line-height:1.8}.stop h4{line-height:1.5}.stop{padding-bottom:12px}.nav-inner{padding:8px 0}.day aside .stay{margin-top:0}.spot-detail p{line-height:1.75}}
+
+/* One quiet transport footer after each selected period, never above it. */
+.transport-footer{margin:4px 0 12px;padding:10px 0 0;border-top:1px dashed #bac6b0;color:var(--muted);font-size:14px;line-height:1.75}.transport-footer>b{font-size:13px;font-weight:500}.transport-footer p{margin:4px 0}.transport-backup{padding-top:5px}.transport-costs{margin:12px 0;font-size:15px}.transport-costs summary{cursor:pointer}.transport-costs p{margin:8px 0}
+@media(max-width:640px){.transport-footer,.transport-costs{font-size:16px}.transport-footer>b{font-size:14px}}
