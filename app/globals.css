@@ -18,3 +18,5 @@ body{font-size:16px;line-height:1.75}.section{padding:36px 0}.hero{height:300px}
 /* One quiet transport footer after each selected period, never above it. */
 .transport-footer{margin:4px 0 12px;padding:10px 0 0;border-top:1px dashed #bac6b0;color:var(--muted);font-size:14px;line-height:1.75}.transport-footer>b{font-size:13px;font-weight:500}.transport-footer p{margin:4px 0}.transport-backup{padding-top:5px}.transport-costs{margin:12px 0;font-size:15px}.transport-costs summary{cursor:pointer}.transport-costs p{margin:8px 0}
 @media(max-width:640px){.transport-footer,.transport-costs{font-size:16px}.transport-footer>b{font-size:14px}}
+
+.spot-link{margin-right:16px}

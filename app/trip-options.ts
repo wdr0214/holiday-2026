@@ -1,7 +1,7 @@
 import {meizhouSchedule,meizhouTransport,meizhouDetails} from './meizhou';
 import {reviseSchedule} from './route-revision';
 import {destinations, type Stop} from './travel-data';
-export type Period={label:string;enabled:boolean;locked?:boolean;stops:Stop[];sight?:number;group?:string};
+export type Period={label:string;enabled:boolean;locked?:boolean;stops:Stop[];sight?:number;sights?:number[];group?:string};
 const stop=(time:string,title:string,detail:string,travel?:string):Stop=>({time,title,detail,travel});
 const period=(label:string,enabled:boolean,stops:Stop[],sight?:number,locked=false):Period=>({label,enabled,stops,sight,locked});
 const q=destinations[0].days,t=destinations[1].days,z=destinations[2].days;
@@ -99,7 +99,7 @@ export function transportForSlot(id:string,start:number,i:number,j:number,slots:
   if(id==='taining'&&(i===0||i===2)) text='下午已在古城：留在附近用晚餐，河畔→尚书街步行约5—15分钟，不回酒店再出门。晚间结束→华大驾车5—10分钟/闽江20—30分钟，假期另加15—20分钟。';
   if(id==='zhangzhou'&&i===0) text='下午已在漳州古城：文庙周边→新华西路步行约5—15分钟，在古城就地晚餐；结束后→漳州宾馆驾车5—10分钟或步行15—25分钟。';
  }
- if(id==='meizhou'&&i===2&&j===1&&!isSlotEnabled(id,start,2,0,slots))text='上午未勾选：13:00左右直接从金沙湾酒店→松口驾车60—75分钟，豪生酒店70—90分钟，假期加20分钟；游玩后原路返酒店，不经雁南飞。';
+ if(id==='meizhou'&&i===2&&j===1&&!isSlotEnabled(id,start,2,0,slots))text='上午未勾选：午餐后直接从豪生酒店→五华热矿泥温泉驾车90—110分钟，金沙湾酒店100—120分钟，假期加20—30分钟；体验后原路返酒店，不经磐安围。';
  return text;
 }
 
@@ -124,7 +124,7 @@ export const nearest:Record<string,{place:string;distance:string}>={
  '112994833':{place:'金銮湾沙滩',distance:'到所选开放入口约5—10公里（规划估算），车程10—20分钟；沿岸酒店与入口并非同一点。'},
  '4498102':{place:'南门湾',distance:'道路约1—3公里（规划估算），车程5—15分钟。'}
 };
-export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/梅州|嘉应|松口|雁南飞|客家博物馆/.test(query)?'梅州':/屯溪|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
+export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/梅州|嘉应|松口|雁南飞|客家博物馆|磐安围|热矿泥/.test(query)?'梅州':/屯溪|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
 
 reviseSchedule(schedules,slotTransport,spotDetails,nearest);
 
