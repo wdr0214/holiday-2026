@@ -1,4 +1,6 @@
 import {meizhou} from './meizhou';
+import {lishui} from './lishui';
+import {reviseShexian} from './shexian';
 import {reviseDestinations} from './route-revision';
 import {hotelPhotos,sightPhotos} from './media-data';
 export type Photo={file:string;caption:string;source:string};
@@ -92,3 +94,14 @@ export const checkItems=['确定目的地和日期，核查三晚每晚大床价
 reviseDestinations(destinations);
 
 destinations.push(meizhou);
+reviseShexian(destinations);
+destinations.push(lishui);
+const refreshedZhangzhouHotel=destinations[2].hotels.find(h=>h.id==='1248606')!;
+refreshedZhangzhouHotel.photos[0].caption='漳州宾馆｜天宝楼行政大床资料照片，非本次所报凌波楼雅致大床';
+refreshedZhangzhouHotel.room='凌波楼雅致大床房｜1张1.8米床，20㎡，3—6层，可吸烟';
+refreshedZhangzhouHotel.minus+=' 本次报价为较小的凌波楼房型，与天宝楼行政大床照片不同；无烟需求提前确认。';
+refreshedZhangzhouHotel.breakfast='本次凌波楼雅致大床套餐含2份早餐，取消条件见对应入住日期；与旧天宝楼报价分开。';
+refreshedZhangzhouHotel.photos[1].caption='漳州宾馆客房资料内景｜未核实为本次凌波楼雅致大床，不据此判断所订房间';
+destinations[2].budget[0][2]='实际2晚漳州＋1晚东山已重查，漳州连住均价540元，东山单晚732／1164元；逐晚及结算价仍须确认';
+for(const d of destinations)d.alternatives=d.alternatives.map(t=>t.replaceAll('千岛湖＋屯溪','千岛湖＋歙县'));
+checkItems[0]='确定目的地和日期，核查每晚大床≤1200元；歙县那晚≤600元';

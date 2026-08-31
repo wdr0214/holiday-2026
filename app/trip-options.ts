@@ -1,4 +1,6 @@
 import {meizhouSchedule,meizhouTransport,meizhouDetails} from './meizhou';
+import {lishuiSchedule,lishuiTransport,lishuiDetails} from './lishui';
+import {shexianDays,shexianTransport} from './shexian';
 import {reviseSchedule} from './route-revision';
 import {destinations, type Stop} from './travel-data';
 export type Period={label:string;enabled:boolean;locked?:boolean;stops:Stop[];sight?:number;sights?:number[];group?:string};
@@ -91,6 +93,7 @@ slotTransport.taining[3][1]='古城午餐后直接出发，不回酒店取行李
 
 export function transportForSlot(id:string,start:number,i:number,j:number,slots:Record<string,boolean>){
  let text=slotTransport[id][i][j];
+ if(id==='lishui'&&i===2&&j===1&&!isSlotEnabled(id,start,i,0,slots))text='上午未勾选：从画乡壹号酒店／隐居画乡酒店步行5—15分钟到江滨古街画廊，不乘古堰回程船；晚餐后同程返酒店。';
  if(id==='zhangzhou'&&i===2&&!isSlotEnabled(id,start,i,1,slots)){
   if(j===0)text+=' 下午未勾选：抵达东山酒店后自行安排。';
   if(j===2)text='下午未勾选：晚餐前从酒店→南门湾，福莱喜25—40分钟/华福5—15分钟，夜景后原路返酒店；假期另留20分钟。若同时启用下午，则可在铜陵连续游玩，减少酒店往返。';
@@ -124,7 +127,7 @@ export const nearest:Record<string,{place:string;distance:string}>={
  '112994833':{place:'金銮湾沙滩',distance:'到所选开放入口约5—10公里（规划估算），车程10—20分钟；沿岸酒店与入口并非同一点。'},
  '4498102':{place:'南门湾',distance:'道路约1—3公里（规划估算），车程5—15分钟。'}
 };
-export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/梅州|嘉应|松口|雁南飞|客家博物馆|磐安围|热矿泥/.test(query)?'梅州':/屯溪|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
+export const mapSearch=(name:string)=>{const aliases:Record<string,string>={'中心湖区·梅峰揽胜':'千岛湖中心湖区旅游码头','酒店湖景＋镇区慢生活':'千岛湖骑龙巷','泰宁古城·尚书第':'泰宁尚书第','风动石·关帝庙':'东山风动石景区'};const query=aliases[name]||name;return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&city=${encodeURIComponent(/丽水|古堰|画乡/.test(query)?'丽水':/云和|梯田/.test(query)?'云和':/梅州|嘉应|松口|雁南飞|客家博物馆|磐安围|热矿泥/.test(query)?'梅州':/屯溪|歙县|渔梁|徽州|昱城|黎阳/.test(query)?'黄山':/田螺坑|土楼/.test(query)?'南靖':/千岛湖|骑龙巷/.test(query)?'淳安':/泰宁|金湖|九龙潭|上清溪/.test(query)?'泰宁':'漳州')}&view=map&src=slowholiday&callnative=1`};
 
 reviseSchedule(schedules,slotTransport,spotDetails,nearest);
 
@@ -140,3 +143,12 @@ spotDetails['泰宁古城·尚书第']=['白天先看尚书第：门楼、院落
 spotDetails['漳州古城']=['走法：文庙周边—新华西路骑楼—附近小吃店，选约1公里短线。白天看屋脊、门面和骑楼连续街景，内部开放再短参观。','卤面、四果汤等两人分着尝，不排网红长队；下午游玩后留古城晚餐，饭后看主街灯光，省去酒店往返。'];
 spotDetails['风动石·关帝庙']=['先看风动石巨石与底部接触关系，再看关帝庙屋脊装饰与古建细节，最后选一小段海岸观景；约1.5小时够看核心。','不加东门屿船游或全海岸环线。第四天带行李到景区，参观后就近简餐直接返福州，减少回酒店一趟。'];
 spotDetails['南门湾']=['沿海湾平缓岸线看弧形海岸与坡地彩色民居，步行20—40分钟后找有座位的茶店；不追天台或长台阶机位。','下午到晚饭后留同一片区：白天看海湾层次，晚上看内侧街巷灯光，再一次回酒店。风浪大时退到内侧街道。'];
+
+schedules.lishui=lishuiSchedule;slotTransport.lishui=lishuiTransport;Object.assign(spotDetails,lishuiDetails);
+for(let i=2;i<4;i++){schedules.qiandao[i]=shexianDays[i-2];slotTransport.qiandao[i]=shexianTransport[i-2];}
+nearest['4334747']={place:'歙县徽州古城',distance:'携程周边列表970米、府衙1.1公里（非道路里程）；道路约1—2公里估算。'};
+nearest['101116861']={place:'古堰画乡香樟码头',distance:'约0.2—0.6公里规划估算，实际入口待核。'};
+nearest['2640591']={place:'古堰画乡江滨古街',distance:'约0.1—0.5公里规划估算，实际入口待核。'};
+spotDetails['歙县徽州古城']=['先到府衙看中轴院落与南谯楼，留意哪些部分为重建；再到许国石坊看八柱围合、石狮与石雕。','最后逛中和街茶墨小店，就近吃徽菜。两个重点间短走即可，不追加城墙和远郊村落。'];
+spotDetails['歙县渔梁古镇']=['沿渔梁古街看徽派民居、巴慰祖故居外观与古埠生活，选一小段走到临江安全观景处。','从岸上看古坝与练江，不下坝、不走湿滑码头；约两小时后就近午餐，带行李直接送黄山北站。'];
+slotTransport.taining[1][0]='华大酒店→金湖旅游景区售票处：2026-08-31百度地图读取10.7公里、驾车17分钟；假期建议留35—50分钟，停车、步行至登船点另留20分钟。闽江酒店→码头仍为5—15分钟规划估算，假期加15—30分钟。游船含登岛约4—5小时，按实际船班。';

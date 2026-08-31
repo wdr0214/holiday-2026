@@ -1,4 +1,5 @@
-// 登录后通过携程可见房型列表核查。均价不证明每晚均符合预算。
+import {refreshRates} from './refreshed-rates';
+// 通过携程可见房型列表核查。均价不证明每晚均符合预算。
 export type Rate={state:'quoted'|'unavailable'|'pending';room?:string;price?:number;breakfast?:string;cancel?:string;note:string;nightly?:string};
 export const rates:Record<string,Record<number,Rate>>={
  '1094669':{
@@ -38,3 +39,4 @@ for(const start of [2,3]){
  rates['1258061'][start]={state:'quoted',room:'豪华大床房｜1张2米特大床，40㎡，15—18层，部分禁烟',price:start===2?634:609,breakfast:'2份早餐',cancel:'订单确认后30分钟内免费取消',note:'2026-08-31携程指定日期1间2成人的可见套餐。3晚平均每晚价，逐晚明细待核；页面显示领券订，含优惠券，未领取或提交订单。在线付、立即确认。取消窗口很短；需要无烟房请提前确认，价格以结算页为准。'};
  rates['968063'][start]={state:'unavailable',note:'2026-08-31携程指定日期1间2成人，页面显示本酒店目前不接受预订。未取得大床报价，不能判断售罄还是尚未放房；飞猪尚未取得对应日期有效报价，仅作位置备选。'};
 }
+refreshRates(rates);
